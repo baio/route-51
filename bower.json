@@ -1,8 +1,8 @@
 {
   "name": "route-51",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Framework agnostic dumb router library, inspired by ui-router",
-  "main": "dist/router.js",
+  "main": "dist/route-51.bulk.js",
   "keywords": [
     "router"
   ],

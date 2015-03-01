@@ -8,4 +8,4 @@ How it works - see tests.
 
 ## Build
 
-`node_modules/coffee-script/bin/coffee -c -o dist/ src/router.coffee`
+` node_modules/.bin/gulp build`
