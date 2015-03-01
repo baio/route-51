@@ -8,8 +8,7 @@ describe "router: test", ->
                 "spots" : 
                     url : "spots"
                     resolve : (ctx, done) ->
-                        ctx.resolved = spots : []
-                        done()
+                        done(null, [])
 
             router = new Router map
 

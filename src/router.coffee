@@ -25,17 +25,19 @@ getState = (route, params) ->
     ctx : 
         params : params
         query : route.query || {}
+        resolved : {}
 
-callResolvers = (resolvers, ctx, done) ->
-    if !resolvers.length 
+callResolvers = (states, ctx, done) ->
+    if !states.length 
         done()
         return
 
-    resolvers[0] ctx, (err) ->
+    states[0].route.resolve ctx, (err, res) ->
         if err 
             done err
-        else if resolvers.length
-            callResolvers resolvers[1..], ctx, done
+        else
+            ctx.resolved[states[0].name] = res
+            callResolvers states[1..], ctx, done
 
 class Router
 
@@ -65,8 +67,8 @@ class Router
             extend(params, rd.params) for rd in recognized                    
             newState = getState recognized[recognized.length - 1], params        
             #find resolvers
-            resolvers = recognized.map((m) -> m.handler.route.resolve).filter((f) -> f)
-            callResolvers resolvers, newState.ctx, (err) => 
+            resolveStates = recognized.map((m) -> m.handler).filter((f) -> f.route.resolve)
+            callResolvers resolveStates, newState.ctx, (err) => 
                 if !err
                     previousState = @state
                     @opts.onBeforeChangeState newState            
