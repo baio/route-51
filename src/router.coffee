@@ -1,18 +1,3 @@
-nextMatch = (match, routes) ->
-    for route in routes                 
-        if !route then continue
-        console.log ">>", route
-
-        #get nested (if starts with the same shit, then nested)
-        nested = routes.filter (f) ->                 
-            f.name.indexOf(route.name + ".") == 0
-        routes[routes.indexOf(nd)] = null for nd in nested                            
-
-        _subRoute = (_match) ->            
-            nextMatch _match, nested            
-
-        match("/" + route.route.url).to {name : route.name, route : route.route}, if nested.length then _subRoute
-
 extend = (dest, src) ->
     dest = dest || {}
     for own prop of src        
@@ -42,6 +27,7 @@ callResolvers = (states, ctx, done) ->
 class Router
 
     constructor: (map, opts) ->
+        
         @opts = extend opts, {
             onBeforeChangeState: ->
             onAfterChangeState: ->                
@@ -51,8 +37,16 @@ class Router
 
 
         @_recognizer = new RouteRecognizer()
-        @_recognizer.map (match) ->
-            nextMatch match, ({name : key, route : val} for key, val of map)
+        
+        routes = ({name : key, route : val} for key, val of map)
+        for route in routes        
+            iter = ""
+            nested = []
+            for spt in route.name.split(".")
+                iter += spt
+                nested.push routes.filter((f) -> f.name == iter)[0]
+                iter += "."
+            @_recognizer.add(nested.map((m) -> path: m.route.url, handler: {route : m.route, name : m.name}), { as: route.name })
 
         hasher.changed.add(@_hashChanged)
         hasher.initialized.add(@_hashChanged)
@@ -68,12 +62,14 @@ class Router
         recognized = @_recognizer.recognize newHash
         if recognized
             recognized = (recognized[i] for i in [0..recognized.length - 1])
+            console.log recognized
             #collect states params
             params = {}
             extend(params, rd.params) for rd in recognized                    
             newState = getState recognized[recognized.length - 1], params        
             #find resolvers
             resolveStates = recognized.map((m) -> m.handler).filter((f) -> f.route.resolve)
+
             callResolvers resolveStates, newState.ctx, (err) => 
                 if !err
                     previousState = @state
