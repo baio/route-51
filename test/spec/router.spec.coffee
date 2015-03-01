@@ -16,6 +16,23 @@ describe "router: test", ->
 
             expect(router.state.ctx.resolved.spots).toEqual([])
 
+        it "children states with params resolve", ->
+
+            map = 
+                "spot" : 
+                    url : "spots/:spotId"
+                    resolve : (ctx, done) ->
+                        done(null, {id : "yahooo"})                    
+                "spot.display" :
+                    url : ""
+                "spot.edit" :
+                    url : "edit"
+
+            router = new Router map
+
+            router._hashChanged "spots/19"        
+
+            expect(router.state.ctx.resolved.spot).toEqual({id : "yahooo"})
 
 	describe "states change", ->
 
@@ -40,6 +57,7 @@ describe "router: test", ->
                 ctx : 
                     params : {}
                     query : {}
+                    resolved : {}
 
             expect(router.opts.onBeforeChangeState).toHaveBeenCalledWith(expected)
             expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected)
@@ -69,6 +87,7 @@ describe "router: test", ->
                 ctx : 
                     params : {spotId : '19'}
                     query : {}
+                    resolved : {}
                     
             expect(router.opts.onBeforeChangeState).toHaveBeenCalledWith(expected)
             expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected)
@@ -83,6 +102,7 @@ describe "router: test", ->
                 ctx : 
                     params : {spotId : '19'}
                     query : {}
+                    resolved : {}
                     
             expect(router.opts.onBeforeChangeState).toHaveBeenCalledWith(expected)
             expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected)
