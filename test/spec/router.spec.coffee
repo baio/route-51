@@ -1,8 +1,26 @@
 describe "router: test", ->
 
-	describe "absolute states", ->
+    describe "states resolvers", ->
 
-		it "simple state", ->
+        fit "simple state resolve", ->
+
+            map = 
+                "spots" : 
+                    url : "spots"
+                    resolve : (ctx, done) ->
+                        ctx.resolved = spots : []
+                        done()
+
+            router = new Router map
+
+            router._hashChanged "/spots"        
+
+            expect(router.state.ctx.resolved.spots).toEqual([])
+
+
+	describe "states change", ->
+
+		it "simple state change", ->
 						
             map = 
                 "spots" : 
@@ -28,7 +46,7 @@ describe "router: test", ->
             expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected)
 
 
-        it "children states with params", ->
+        it "children states with params change", ->
                         
             map = 
                 "spot" : 

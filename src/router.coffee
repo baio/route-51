@@ -26,6 +26,17 @@ getState = (route, params) ->
         params : params
         query : route.query || {}
 
+callResolvers = (resolvers, ctx, done) ->
+    if !resolvers.length 
+        done()
+        return
+
+    resolvers[0] ctx, (err) ->
+        if err 
+            done err
+        else if resolvers.length
+            callResolvers resolvers[1..], ctx, done
+
 class Router
 
     constructor: (map, opts) ->
@@ -47,17 +58,23 @@ class Router
 
     _hashChanged: (newHash, oldHash) =>    
         recognized = @_recognizer.recognize newHash
-        console.log recognized?[0].handler
         if recognized
-            #collect all parent states params
+            recognized = (recognized[i] for i in [0..recognized.length - 1])
+            #collect states params
             params = {}
-            extend(params, rd.params) for rd in recognized            
-            #resolve resolvers uhuh
-            newState = getState recognized[recognized.length - 1], params
-            previousState = @state
-            @opts.onBeforeChangeState newState
-            hasher.setHash newState.hash
-            @opts.onAfterChangeState newState
+            extend(params, rd.params) for rd in recognized                    
+            newState = getState recognized[recognized.length - 1], params        
+            #find resolvers
+            resolvers = recognized.map((m) -> m.handler.route.resolve).filter((f) -> f)
+            callResolvers resolvers, newState.ctx, (err) => 
+                if !err
+                    previousState = @state
+                    @opts.onBeforeChangeState newState            
+                    hasher.setHash newState.hash
+                    @opts.onAfterChangeState newState
+                    @state = newState
+                else
+                    throw err
         else
             @opts.onNotFound newHash
 
