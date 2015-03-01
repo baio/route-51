@@ -1,0 +1,25 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Router 51</title>
+  <meta name="description" content="Framework agnostic dumb router library, inspired by ui-router">
+  <meta name="author" content="max.putilov@gmail.com">
+
+  <script src="bower_components/js-signals/signals.min.js"></script>
+  <script src="bower_components/hasher/dist/js/hasher.min.js"></script>
+  <script src="bower_components/route-recognizer/route-recognizer.js"></script>  
+
+</head>
+
+<body>
+	<a click="router.go('spots.main', {spotId : 1})">Spot-1 main</a>
+	<a click="router.go('spots.main', {spotId : 2})">Spot-2 main</a>
+	<a click="router.go('.edit', {spotId : 2})">edit spot</a>
+	<a click="router.go('^events')">Reltive events</a>
+	<a click="router.go('spots')">Spots list</a>
+  	<script src="index.js"></script>
+</body>
+</html>

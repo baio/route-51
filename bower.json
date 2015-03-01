@@ -1,0 +1,25 @@
+{
+  "name": "route-51",
+  "version": "0.0.0",
+  "description": "Framework agnostic dumb router library, inspired by ui-router",
+  "main": "index.js",
+  "keywords": [
+    "router"
+  ],
+  "authors": [
+    "max.putilov@gmail.com"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "route-recognizer": "~0.1.5",
+    "hasher": "~1.2.0",
+    "js-signals": "~1.0.0"
+  }
+}
