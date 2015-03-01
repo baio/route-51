@@ -2,7 +2,7 @@ describe "router: test", ->
 
     describe "states resolvers", ->
 
-        fit "simple state resolve", ->
+        it "simple state resolve", ->
 
             map = 
                 "spots" : 
