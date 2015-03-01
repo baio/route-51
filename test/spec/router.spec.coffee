@@ -3,17 +3,21 @@ describe "router: test", ->
     beforeEach ->
         hasher.setHash("")
 
-    it "not found (default) path", ->
+    describe "opts", ->
 
-            map = 
-                "spots" : 
-                    url : "spots"
+        it "not found (default) path", ->
 
-            router = new Router map, onNotFound: (_, router) -> router.go "spots"
+                map = 
+                    "spots" : 
+                        url : "spots"
 
-            expect(router.state.name).toEqual("spots")
-            expect(router.isState("spots")).toEqual(true)
-            expect(router.isState("spot")).toEqual(false)
+                router = new Router map, onNotFound: (_, router) -> router.go "spots"
+
+                expect(router.state.name).toEqual("spots")
+                expect(router.isState("spots")).toEqual(true)
+                expect(router.isState("spot")).toEqual(false)
+
+                router.opts.onNotFound = ->
 
     describe "go", ->
 
@@ -28,6 +32,7 @@ describe "router: test", ->
             spyOn(router.opts, "onBeforeChangeState")
             spyOn(router.opts, "onAfterChangeState")
 
+            console.log "zzzz", hasher.getHash()
             router.go "spots"     
 
             expected = 
@@ -71,8 +76,8 @@ describe "router: test", ->
             expect(router.state.ctx.params).toEqual(spotId : "19")
             expect(router.isState("spots")).toEqual(false)
             expect(router.isState("spot")).toEqual(true)
-            expect(router.isState("spot.display")).toEqual(true)
-            expect(router.isState("spot.edit")).toEqual(false)
+            expect(router.isState("spot.display")).toEqual(false)
+            expect(router.isState("spot.edit")).toEqual(true)
 
     
     describe "states resolvers", ->
