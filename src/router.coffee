@@ -58,6 +58,11 @@ class Router
         hasher.initialized.add(@_hashChanged)
         hasher.init()
 
+    go: (state, params) ->
+        console.log @_recognizer.names
+        hash = @_recognizer.generate state, params
+        console.log hash
+        hasher.setHash hash
 
     _hashChanged: (newHash, oldHash) =>    
         recognized = @_recognizer.recognize newHash

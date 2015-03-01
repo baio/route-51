@@ -1,5 +1,34 @@
 describe "router: test", ->
 
+    ###
+    describe "go", ->
+
+        xit "simple state go", ->
+
+            map = 
+                "spots" : 
+                    url : "spots"
+
+            router = new Router map
+
+            spyOn(router.opts, "onBeforeChangeState")
+            spyOn(router.opts, "onAfterChangeState")
+
+            router.go "spots"     
+
+            expected = 
+                name : "spots",
+                route : 
+                    url  : "spots",
+                ctx : 
+                    params : {}
+                    query : {}
+                    resolved : {}
+
+            expect(router.opts.onBeforeChangeState).toHaveBeenCalledWith(expected, undefined)
+            expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected, undefined)
+    ###
+
     describe "states resolvers", ->
 
         it "simple state resolve", ->
