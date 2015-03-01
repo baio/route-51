@@ -45,7 +45,8 @@ class Router
         @opts = extend opts, {
             onBeforeChangeState: ->
             onAfterChangeState: ->                
-            onNotFound: (state) -> new Error "State not found", state                  
+            onNotFound: (state) -> throw new Error "State not found", state 
+            onError: (err, state) -> throw err
         };
 
 
@@ -76,7 +77,7 @@ class Router
                         @opts.onAfterChangeState newState
                         @state = newState
                 else
-                    throw err
+                    @opts.onError err, newState
         else
             @opts.onNotFound newHash
 
