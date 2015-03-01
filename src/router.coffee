@@ -53,16 +53,14 @@ class Router
         hasher.init()
 
     go: (state, params) ->
-        console.log @_recognizer.names
         hash = @_recognizer.generate state, params
-        console.log hash
         hasher.setHash hash
 
     _hashChanged: (newHash, oldHash) =>    
+        console.log "zzz", newHash, oldHash 
         recognized = @_recognizer.recognize newHash
         if recognized
             recognized = (recognized[i] for i in [0..recognized.length - 1])
-            console.log recognized
             #collect states params
             params = {}
             extend(params, rd.params) for rd in recognized                    
@@ -73,10 +71,9 @@ class Router
             callResolvers resolveStates, newState.ctx, (err) => 
                 if !err
                     previousState = @state
-                    if @opts.onBeforeChangeState(newState, previousState) != false            
-                        hasher.setHash newState.hash
-                        @opts.onAfterChangeState(newState, previousState)
+                    if @opts.onBeforeChangeState(newState, previousState) != false                                    
                         @state = newState
+                        @opts.onAfterChangeState(newState, previousState)
                 else
                     @opts.onError err, newState
         else

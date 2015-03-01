@@ -1,9 +1,11 @@
 describe "router: test", ->
 
-    ###
+    beforeEach ->
+        hasher.setHash("")
+
     describe "go", ->
 
-        xit "simple state go", ->
+        it "simple state go", ->
 
             map = 
                 "spots" : 
@@ -27,7 +29,7 @@ describe "router: test", ->
 
             expect(router.opts.onBeforeChangeState).toHaveBeenCalledWith(expected, undefined)
             expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected, undefined)
-    ###
+    
 
     describe "states resolvers", ->
 
@@ -41,7 +43,7 @@ describe "router: test", ->
 
             router = new Router map
 
-            router._hashChanged "/spots"        
+            router.go "spots"
 
             expect(router.state.ctx.resolved.spots).toEqual([])
 
@@ -59,7 +61,7 @@ describe "router: test", ->
 
             router = new Router map
 
-            router._hashChanged "spots/19"        
+            router.go "spot.display", {id : 19}        
 
             expect(router.state.ctx.resolved.spot).toEqual({id : "yahooo"})
 
@@ -77,7 +79,7 @@ describe "router: test", ->
             spyOn(router.opts, "onBeforeChangeState")
             spyOn(router.opts, "onAfterChangeState")
 
-            router._hashChanged "/spots"		
+            router.go "spots"		
 
             expected = 
                 name : "spots",
@@ -107,7 +109,7 @@ describe "router: test", ->
             spyOn(router.opts, "onBeforeChangeState")
             spyOn(router.opts, "onAfterChangeState")
 
-            router._hashChanged "spots/19"        
+            router.go "spot.display", {spotId : "19"}        
 
             expected = 
                 name : "spot.display",
@@ -122,7 +124,7 @@ describe "router: test", ->
             expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected, undefined)
 
 
-            router._hashChanged "spots/19/edit"        
+            router.go "spot.edit", {spotId : 19}        
 
             expected2 = 
                 name : "spot.edit",
