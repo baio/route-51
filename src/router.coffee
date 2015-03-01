@@ -52,8 +52,12 @@ class Router
         hasher.initialized.add(@_hashChanged)
         hasher.init()
 
-    go: (state, params) ->
-        hash = @_recognizer.generate state, params
+    go: (stateName, params) ->
+        #TODO : now supported only one step above ^ !!!
+        if stateName.indexOf("^") == 0
+            stateName = @state.name.substring(0, @state.name.lastIndexOf(".")) + "." + stateName.substring(1)
+        params = extend params, @state?.ctx.params            
+        hash = @_recognizer.generate stateName, params
         hasher.setHash hash
 
     _hashChanged: (newHash, oldHash) =>    

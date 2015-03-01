@@ -31,6 +31,28 @@ describe "router: test", ->
             expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected, undefined)
     
 
+        fit "relative state go", ->
+
+            map = 
+                "spot" :
+                    url : "spots/:spotId"
+                "spot.display" :
+                    url : ""
+                "spot.edit" :
+                    url : "edit"
+
+            router = new Router map
+
+            router.go "spot.display", {spotId : "19"}        
+
+            expect(router.state.name).toEqual("spot.display")
+            expect(router.state.ctx.params).toEqual(spotId : "19")
+
+            router.go "^edit"
+
+            expect(router.state.name).toEqual("spot.edit")
+            expect(router.state.ctx.params).toEqual(spotId : "19")
+    
     describe "states resolvers", ->
 
         it "simple state resolve", ->
