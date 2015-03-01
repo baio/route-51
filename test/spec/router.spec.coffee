@@ -59,8 +59,8 @@ describe "router: test", ->
                     query : {}
                     resolved : {}
 
-            expect(router.opts.onBeforeChangeState).toHaveBeenCalledWith(expected)
-            expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected)
+            expect(router.opts.onBeforeChangeState).toHaveBeenCalledWith(expected, undefined)
+            expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected, undefined)
 
 
         it "children states with params change", ->
@@ -89,13 +89,13 @@ describe "router: test", ->
                     query : {}
                     resolved : {}
                     
-            expect(router.opts.onBeforeChangeState).toHaveBeenCalledWith(expected)
-            expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected)
+            expect(router.opts.onBeforeChangeState).toHaveBeenCalledWith(expected, undefined)
+            expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected, undefined)
 
 
             router._hashChanged "spots/19/edit"        
 
-            expected = 
+            expected2 = 
                 name : "spot.edit",
                 route : 
                     url  : "edit",
@@ -104,8 +104,8 @@ describe "router: test", ->
                     query : {}
                     resolved : {}
                     
-            expect(router.opts.onBeforeChangeState).toHaveBeenCalledWith(expected)
-            expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected)
+            expect(router.opts.onBeforeChangeState).toHaveBeenCalledWith(expected2, expected)
+            expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected2, expected)
 
 
             #router._hashChanged "/spots/19"

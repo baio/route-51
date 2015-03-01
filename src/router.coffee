@@ -72,9 +72,9 @@ class Router
             callResolvers resolveStates, newState.ctx, (err) => 
                 if !err
                     previousState = @state
-                    if @opts.onBeforeChangeState(newState) != false            
+                    if @opts.onBeforeChangeState(newState, previousState) != false            
                         hasher.setHash newState.hash
-                        @opts.onAfterChangeState newState
+                        @opts.onAfterChangeState(newState, previousState)
                         @state = newState
                 else
                     @opts.onError err, newState
