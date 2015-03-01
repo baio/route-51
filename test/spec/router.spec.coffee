@@ -3,6 +3,16 @@ describe "router: test", ->
     beforeEach ->
         hasher.setHash("")
 
+    it "not found (default) path", ->
+
+            map = 
+                "spots" : 
+                    url : "spots"
+
+            router = new Router map, onNotFound: (_, router) -> router.go "spots"
+
+            expect(router.state.name).toEqual("spots")
+
     describe "go", ->
 
         it "simple state go", ->
@@ -31,7 +41,7 @@ describe "router: test", ->
             expect(router.opts.onAfterChangeState).toHaveBeenCalledWith(expected, undefined)
     
 
-        fit "relative state go", ->
+        it "relative state go", ->
 
             map = 
                 "spot" :

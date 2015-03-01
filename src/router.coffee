@@ -61,7 +61,7 @@ class Router
         hasher.setHash hash
 
     _hashChanged: (newHash, oldHash) =>    
-        console.log "zzz", newHash, oldHash 
+        console.log "_hashChanged", newHash, oldHash 
         recognized = @_recognizer.recognize newHash
         if recognized
             recognized = (recognized[i] for i in [0..recognized.length - 1])
@@ -81,7 +81,7 @@ class Router
                 else
                     @opts.onError err, newState
         else
-            @opts.onNotFound newHash
+            @opts.onNotFound newHash, @
 
 window.Router = Router
 
