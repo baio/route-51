@@ -45,7 +45,7 @@ class Router
         @opts = extend opts, {
             onBeforeChangeState: ->
             onAfterChangeState: ->                
-            onNotFound: (state) -> throw new Error "State not found", state 
+            onNotFound: (state) -> console.log "State not found", state 
             onError: (err, state) -> throw err
         };
 
