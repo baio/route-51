@@ -14,17 +14,16 @@ nextMatch = (match, routes) ->
         match("/" + route.route.url).to {name : route.name, route : route.route}, if nested.length then _subRoute
 
 extend = (dest, src) ->
-    dest = {} || dest;
+    dest = dest || {}
     for own prop of src        
         dest[prop] = src[prop] if dest[prop] == undefined
     dest
 
 getState = (route, params) ->
     name : route.handler.name
-    hash : route.handler.route.url
     route : route.handler.route
     ctx : 
-        params : route.params
+        params : params
         query : route.query || {}
 
 class Router
@@ -48,9 +47,13 @@ class Router
 
     _hashChanged: (newHash, oldHash) =>    
         recognized = @_recognizer.recognize newHash
+        console.log recognized?[0].handler
         if recognized
+            #collect all parent states params
+            params = {}
+            extend(params, rd.params) for rd in recognized            
             #resolve resolvers uhuh
-            newState = getState recognized[recognized.length - 1]
+            newState = getState recognized[recognized.length - 1], params
             previousState = @state
             @opts.onBeforeChangeState newState
             hasher.setHash newState.hash
