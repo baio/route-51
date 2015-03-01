@@ -12,6 +12,8 @@ describe "router: test", ->
             router = new Router map, onNotFound: (_, router) -> router.go "spots"
 
             expect(router.state.name).toEqual("spots")
+            expect(router.isState("spots")).toEqual(true)
+            expect(router.isState("spot")).toEqual(false)
 
     describe "go", ->
 
@@ -57,11 +59,21 @@ describe "router: test", ->
 
             expect(router.state.name).toEqual("spot.display")
             expect(router.state.ctx.params).toEqual(spotId : "19")
+            expect(router.isState("spots")).toEqual(false)
+            expect(router.isState("spot")).toEqual(true)
+            expect(router.isState("spot.display")).toEqual(true)
+            expect(router.isState("spot.edit")).toEqual(false)
+
 
             router.go "^edit"
 
             expect(router.state.name).toEqual("spot.edit")
             expect(router.state.ctx.params).toEqual(spotId : "19")
+            expect(router.isState("spots")).toEqual(false)
+            expect(router.isState("spot")).toEqual(true)
+            expect(router.isState("spot.display")).toEqual(true)
+            expect(router.isState("spot.edit")).toEqual(false)
+
     
     describe "states resolvers", ->
 

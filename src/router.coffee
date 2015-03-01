@@ -52,6 +52,9 @@ class Router
         hasher.initialized.add(@_hashChanged)
         hasher.init()
 
+    isState: (stateMatch) ->
+        if @state then stateMatch == @state.name or (new RegExp "^#{stateMatch}[/.]").test(@state.name) else false
+
     go: (stateName, params) ->
         #TODO : now supported only one step above ^ !!!
         if stateName.indexOf("^") == 0
